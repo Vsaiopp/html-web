@@ -32,115 +32,99 @@
                 </div>
             </section>
 
-            <!-- Add Player View -->
-            <section id="addPlayerView" class="view">
-                <button class="btn btn-secondary back-btn" onclick="app.showDashboard()">← Back to Dashboard</button>
-                <div class="glass-card" style="max-width: 600px; margin: 0 auto;">
-                    <h2 style="margin-bottom: 1.5rem;">Register New Cricketer</h2>
-                    <form id="newPlayerForm">
-                        <div class="form-group">
-                            <label for="playerName">Full Name</label>
-                            <input type="text" id="playerName" required placeholder="e.g. Virat Kohli">
-                        </div>
-                        <div class="form-group">
-                            <label for="playerRole">Role</label>
-                            <select id="playerRole" required>
-                                <option value="Batsman">Batsman</option>
-                                <option value="Bowler">Bowler</option>
-                                <option value="All-Rounder">All-Rounder</option>
-                                <option value="Wicketkeeper">Wicketkeeper</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="playerCountry">Country/Team</label>
-                            <input type="text" id="playerCountry" required placeholder="e.g. India">
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%">Create Profile</button>
-                    </form>
+            <option value="All-Rounder">All-Rounder</option>
+            <option value="Wicketkeeper">Wicketkeeper</option>
+            </select>
+    </div>
+    <div class="form-group">
+        <label for="playerCountry">Country/Team</label>
+        <input type="text" id="playerCountry" required placeholder="e.g. India">
+    </div>
+    <button type="submit" class="btn btn-primary" style="width: 100%">Create Profile</button>
+    </form>
+    </div>
+    </section>
+
+    <!-- Player Details View -->
+    <section id="playerDetailsView" class="view">
+        <button class="btn btn-secondary back-btn" onclick="app.showDashboard()">← Back to Dashboard</button>
+
+        <div class="glass-card" style="margin-bottom: 2rem;">
+            <div class="player-header">
+                <div>
+                    <h2 id="detailName" style="font-size: 2rem; margin-bottom: 0.5rem;">Player Name</h2>
+                    <span id="detailRole" class="player-role">Role</span>
+                    <span id="detailTeam" style="color: var(--text-muted); margin-left: 1rem;">Team</span>
                 </div>
-            </section>
+                <button class="btn btn-primary" onclick="app.showAddRecordModal()">+ Add Match Record</button>
+            </div>
 
-            <!-- Player Details View -->
-            <section id="playerDetailsView" class="view">
-                <button class="btn btn-secondary back-btn" onclick="app.showDashboard()">← Back to Dashboard</button>
+            <div class="grid" style="margin-top: 2rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="stat-box">
+                    <div class="stat-label">Total Matches</div>
+                    <div class="stat-value" id="totalMatches" style="font-size: 2rem;">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Total Runs</div>
+                    <div class="stat-value" id="totalRuns" style="font-size: 2rem;">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Total Wickets</div>
+                    <div class="stat-value" id="totalWickets" style="font-size: 2rem;">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Highest Score</div>
+                    <div class="stat-value" id="highestScore" style="font-size: 2rem;">0</div>
+                </div>
+            </div>
+        </div>
 
-                <div class="glass-card" style="margin-bottom: 2rem;">
-                    <div class="player-header">
-                        <div>
-                            <h2 id="detailName" style="font-size: 2rem; margin-bottom: 0.5rem;">Player Name</h2>
-                            <span id="detailRole" class="player-role">Role</span>
-                            <span id="detailTeam" style="color: var(--text-muted); margin-left: 1rem;">Team</span>
-                        </div>
-                        <button class="btn btn-primary" onclick="app.showAddRecordModal()">+ Add Match Record</button>
+        <h3 style="margin-bottom: 1rem;">Match History</h3>
+        <div id="recordsList" class="grid">
+            <!-- Records will be injected here -->
+        </div>
+    </section>
+
+    <!-- Add Record Modal (Hidden by default, shown as overlay or inline for simplicity in this version) -->
+    <section id="addRecordView" class="view">
+        <button class="btn btn-secondary back-btn" id="backToDetailsBtn">← Back to Player</button>
+        <div class="glass-card" style="max-width: 600px; margin: 0 auto;">
+            <h2 style="margin-bottom: 1.5rem;">Log Match Performance</h2>
+            <form id="newRecordForm">
+                <div class="form-group">
+                    <label for="opponent">Opponent</label>
+                    <input type="text" id="opponent" required placeholder="e.g. Australia">
+                </div>
+                <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="runs">Runs Scored</label>
+                        <input type="number" id="runs" min="0" value="0">
                     </div>
-
-                    <div class="grid"
-                        style="margin-top: 2rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                        <div class="stat-box">
-                            <div class="stat-label">Total Matches</div>
-                            <div class="stat-value" id="totalMatches" style="font-size: 2rem;">0</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-label">Total Runs</div>
-                            <div class="stat-value" id="totalRuns" style="font-size: 2rem;">0</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-label">Total Wickets</div>
-                            <div class="stat-value" id="totalWickets" style="font-size: 2rem;">0</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-label">Highest Score</div>
-                            <div class="stat-value" id="highestScore" style="font-size: 2rem;">0</div>
-                        </div>
+                    <div class="form-group">
+                        <label for="balls">Balls Faced</label>
+                        <input type="number" id="balls" min="0" value="0">
                     </div>
                 </div>
-
-                <h3 style="margin-bottom: 1rem;">Match History</h3>
-                <div id="recordsList" class="grid">
-                    <!-- Records will be injected here -->
+                <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="wickets">Wickets Taken</label>
+                        <input type="number" id="wickets" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="overs">Overs Bowled</label>
+                        <input type="number" id="overs" min="0" step="0.1" value="0">
+                    </div>
                 </div>
-            </section>
-
-            <!-- Add Record Modal (Hidden by default, shown as overlay or inline for simplicity in this version) -->
-            <section id="addRecordView" class="view">
-                <button class="btn btn-secondary back-btn" id="backToDetailsBtn">← Back to Player</button>
-                <div class="glass-card" style="max-width: 600px; margin: 0 auto;">
-                    <h2 style="margin-bottom: 1.5rem;">Log Match Performance</h2>
-                    <form id="newRecordForm">
-                        <div class="form-group">
-                            <label for="opponent">Opponent</label>
-                            <input type="text" id="opponent" required placeholder="e.g. Australia">
-                        </div>
-                        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div class="form-group">
-                                <label for="runs">Runs Scored</label>
-                                <input type="number" id="runs" min="0" value="0">
-                            </div>
-                            <div class="form-group">
-                                <label for="balls">Balls Faced</label>
-                                <input type="number" id="balls" min="0" value="0">
-                            </div>
-                        </div>
-                        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div class="form-group">
-                                <label for="wickets">Wickets Taken</label>
-                                <input type="number" id="wickets" min="0" value="0">
-                            </div>
-                            <div class="form-group">
-                                <label for="overs">Overs Bowled</label>
-                                <input type="number" id="overs" min="0" step="0.1" value="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="matchDate">Date</label>
-                            <input type="date" id="matchDate" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%">Save Record</button>
-                    </form>
+                <div class="form-group">
+                    <label for="matchDate">Date</label>
+                    <input type="date" id="matchDate" required>
                 </div>
-            </section>
+                <button type="submit" class="btn btn-primary" style="width: 100%">Save Record</button>
+            </form>
+        </div>
+    </section>
 
-        </main>
+    </main>
     </div>
     <script src="app.js"></script>
 </body>

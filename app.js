@@ -17,7 +17,7 @@ const app = {
             details: document.getElementById('playerDetailsView'),
             addRecord: document.getElementById('addRecordView')
         };
-        
+
         this.elements = {
             playersGrid: document.getElementById('playersGrid'),
             emptyState: document.getElementById('emptyState'),
@@ -25,7 +25,7 @@ const app = {
             newPlayerForm: document.getElementById('newPlayerForm'),
             newRecordForm: document.getElementById('newRecordForm'),
             backToDetailsBtn: document.getElementById('backToDetailsBtn'),
-            
+
             // Detail elements
             detailName: document.getElementById('detailName'),
             detailRole: document.getElementById('detailRole'),
@@ -40,7 +40,7 @@ const app = {
 
     bindEvents() {
         this.elements.addPlayerBtn.addEventListener('click', () => this.showView('addPlayer'));
-        
+
         this.elements.newPlayerForm.addEventListener('submit', (e) => {
             e.preventDefault();
             this.handleAddPlayer();
@@ -54,6 +54,73 @@ const app = {
         this.elements.backToDetailsBtn.addEventListener('click', () => {
             this.showPlayerDetails(this.state.currentPlayerId);
         });
+
+        // Fetch Feature
+        const fetchBtn = document.getElementById('fetchPlayerBtn');
+        if (fetchBtn) {
+            fetchBtn.addEventListener('click', () => this.handleFetchPlayer());
+        }
+    },
+
+    async handleFetchPlayer() {
+        const nameInput = document.getElementById('playerName');
+        const name = nameInput.value.trim();
+        const feedback = document.getElementById('fetchFeedback');
+        const icon = document.getElementById('fetchIcon');
+        const spinner = document.getElementById('fetchSpinner');
+
+        if (!name) {
+            feedback.textContent = 'Please enter a name first.';
+            feedback.className = 'fetch-feedback text-error';
+            return;
+        }
+
+        // UI Loading State
+        icon.style.display = 'none';
+        spinner.style.display = 'block';
+        feedback.textContent = 'Searching database...';
+        feedback.className = 'fetch-feedback';
+
+        try {
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            const data = this.mockPlayerDatabase(name);
+
+            if (data) {
+                document.getElementById('playerRole').value = data.role;
+                document.getElementById('playerCountry').value = data.country;
+                feedback.innerHTML = '✓ Found! Details auto-filled.';
+                feedback.className = 'fetch-feedback text-success';
+            } else {
+                const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(name + ' cricketer stats')}`;
+                feedback.innerHTML = `Player not found in local DB. <a href="${searchUrl}" target="_blank" class="text-link">Search on Google</a>`;
+                feedback.className = 'fetch-feedback text-error';
+            }
+        } catch (error) {
+            feedback.textContent = 'Error fetching data.';
+            feedback.className = 'fetch-feedback text-error';
+        } finally {
+            icon.style.display = 'block';
+            spinner.style.display = 'none';
+        }
+    },
+
+    mockPlayerDatabase(name) {
+        // Simple mock DB for demo purposes
+        const db = {
+            'virat kohli': { role: 'Batsman', country: 'India' },
+            'rohit sharma': { role: 'Batsman', country: 'India' },
+            'ms dhoni': { role: 'Wicketkeeper', country: 'India' },
+            'steve smith': { role: 'Batsman', country: 'Australia' },
+            'pat cummins': { role: 'Bowler', country: 'Australia' },
+            'ben stokes': { role: 'All-Rounder', country: 'England' },
+            'jasprit bumrah': { role: 'Bowler', country: 'India' },
+            'kane williamson': { role: 'Batsman', country: 'New Zealand' },
+            'babar azam': { role: 'Batsman', country: 'Pakistan' },
+            'rashid khan': { role: 'Bowler', country: 'Afghanistan' }
+        };
+        return db[name.toLowerCase()];
     },
 
     saveState() {
@@ -64,7 +131,7 @@ const app = {
     showView(viewName) {
         Object.values(this.views).forEach(view => view.classList.remove('active'));
         this.views[viewName].classList.add('active');
-        
+
         // Toggle header button visibility
         this.elements.addPlayerBtn.style.display = viewName === 'dashboard' ? 'block' : 'none';
     },
@@ -129,14 +196,14 @@ const app = {
     // Rendering
     renderDashboard() {
         this.elements.playersGrid.innerHTML = '';
-        
+
         if (this.state.players.length === 0) {
             this.elements.emptyState.style.display = 'block';
             return;
         }
-        
+
         this.elements.emptyState.style.display = 'none';
-        
+
         this.state.players.forEach(player => {
             const totalRuns = player.records.reduce((sum, r) => sum + r.runs, 0);
             const totalWickets = player.records.reduce((sum, r) => sum + r.wickets, 0);
